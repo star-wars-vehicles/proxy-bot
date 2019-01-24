@@ -1,0 +1,55 @@
+{
+  "name": "proxy-bot",
+  "version": "0.1.0",
+  "description": "The Discord bot server the Star Wars Vehicles Discord server.",
+  "main": "index.js",
+  "scripts": {
+    "lint:gulp": "gulp lint",
+    "build:gulp": "gulp build",
+    "watch:gulp": "gulp watch",
+    "serve:gulp": "gulp serve",
+    "start:gulp": "gulp start",
+    "serve": "npm run serve:gulp -s",
+    "watch": "npm run watch:gulp -s",
+    "lint": "npm run lint:gulp -s",
+    "build": "npm run build:gulp -s",
+    "start": "npm run start:gulp -s"
+  },
+  "keywords": [
+    "discord",
+    "star",
+    "wars",
+    "discordjs",
+    "discord",
+    "bot"
+  ],
+  "author": "David Katz",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "@types/debug": "0.0.31",
+    "@types/node": "^10.12.18",
+    "debug": "^4.1.1",
+    "del": "^3.0.0",
+    "gulp": "^4.0.0",
+    "gulp-nodemon": "^2.4.2",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-ts-alias": "^0.1.5",
+    "gulp-tslint": "^8.1.3",
+    "gulp-typescript": "^5.0.0",
+    "nodemon": "^1.18.9",
+    "tslint": "^5.12.1",
+    "tslint-eslint-rules": "^5.4.0",
+    "typescript": "^3.2.2"
+  },
+  "dependencies": {
+    "@types/node-fetch": "^2.1.4",
+    "discord-paginationembed": "github:gazmull/discord-paginationembed#v11",
+    "discord.js": "^11.4.2",
+    "discord.js-commando": "^0.10.0",
+    "node-fetch": "^2.3.0",
+    "sqlite": "^3.0.0"
+  },
+  "optionalDependencies": {
+    "bufferutil": "^4.0.1"
+  }
+}

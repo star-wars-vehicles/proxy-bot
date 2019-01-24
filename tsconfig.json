@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "commonjs",
+
+    "outDir": "./build",
+    "rootDir": "./src",
+
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+    },
+
+    "declaration": false,
+    "strict": true,
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "alwaysStrict": true,
+    "typeRoots": ["./node_modules/@types"],
+    "resolveJsonModule": true
+  },
+  "exclude": [
+    "./build/*",
+    "./node_modules/*",
+    "./dist/*"
+  ],
+  "include": [
+    "./src/**/*.ts"
+  ]
+}
