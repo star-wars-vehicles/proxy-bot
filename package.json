@@ -26,7 +26,7 @@
   "author": "David Katz",
   "license": "GPL-3.0",
   "devDependencies": {
-    "@types/debug": "0.0.31",
+    "@types/debug": "4.1.4",
     "@types/node": "^10.12.18",
     "debug": "^4.1.1",
     "del": "^3.0.0",
