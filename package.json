@@ -47,7 +47,7 @@
     "discord.js": "^11.4.2",
     "discord.js-commando": "^0.10.0",
     "node-fetch": "^2.3.0",
-    "sqlite": "^3.0.0"
+    "sqlite": "^3.0.3"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.1"
