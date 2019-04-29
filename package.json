@@ -46,7 +46,7 @@
     "discord-paginationembed": "github:gazmull/discord-paginationembed#v11",
     "discord.js": "^11.4.2",
     "discord.js-commando": "^0.10.0",
-    "node-fetch": "^2.3.0",
+    "node-fetch": "^2.4.1",
     "sqlite": "^3.0.3"
   },
   "optionalDependencies": {
