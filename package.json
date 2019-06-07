@@ -42,7 +42,7 @@
     "typescript": "^3.5.1"
   },
   "dependencies": {
-    "@types/node-fetch": "^2.3.4",
+    "@types/node-fetch": "^2.3.5",
     "discord-paginationembed": "github:gazmull/discord-paginationembed#v11",
     "discord.js": "^11.4.2",
     "discord.js-commando": "^0.10.0",
