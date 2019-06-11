@@ -2,11 +2,15 @@
 
 import * as util from 'util';
 
-import { Message, RichEmbed } from 'discord.js';
-import { CommandMessage } from 'discord.js-commando';
-import { ProxyCommand, ProxyClient } from '@/structures';
+import { Mongoose } from 'mongoose';
+import { Message, MessageEmbed } from 'discord.js';
+import { CommandoMessage } from 'discord.js-commando';
+import { Embeds as EmbedPaginator } from 'discord-paginationembed';
 
-class EvalCommand extends ProxyCommand {
+import { ProxyCommand, ProxyClient } from '@/structures';
+// import { EmbedPaginator } from '@/structures/paginator';
+
+export default class EvalCommand extends ProxyCommand {
   private lastResult: any = null;
   private sensitivePattern: RegExp = new RegExp('');
 
@@ -38,9 +42,10 @@ class EvalCommand extends ProxyCommand {
     });
   }
 
-  public async run(message: CommandMessage, args: { script: string }): Promise<Message | Message[]> {
-    const msg: CommandMessage = message;
+  public async run(message: CommandoMessage, args: { script: string }): Promise<Message | Message[]> {
+    const msg: CommandoMessage = message;
     const client: ProxyClient = message.client as ProxyClient;
+    const db: Mongoose = client.mongoose;
     const objects = client.registry.evalObjects;
     const lastResult = this.lastResult;
 
@@ -48,14 +53,36 @@ class EvalCommand extends ProxyCommand {
       if (val instanceof Error) {
         message.reply(`Callback error: \`${val}\``);
       } else {
-        const embed = this.generateResultEmbed(val, process.hrtime(this.hrStart));
+        if (Array.isArray(val)) {
+          const embeds = val.map((value: any): MessageEmbed => {
+            return this.generateResultEmbed(value, process.hrtime(this.hrStart));
+          });
 
-        if (Array.isArray(embed)) {
-          for (const item of embed) {
-            message.reply(item);
+          try {
+            new EmbedPaginator()
+              .setChannel(message.channel)
+              .setArray(embeds)
+              .setAuthorizedUsers([ message.author.id ])
+              .build().catch((error: any) => {
+                const embed = new MessageEmbed()
+                .setTitle('Error')
+                .setColor('DARK_RED')
+                .addField('Input', `\`\`\`javascript\n${args.script}\n\`\`\``)
+                .addField('Output', `\`\`\`javascript\n${error}\n\`\`\``);
+
+                return message.channel.send({ embed });
+              });
+          } catch (error) {
+            const embed = new MessageEmbed()
+            .setTitle('Error')
+            .setColor('DARK_RED')
+            .addField('Input', `\`\`\`javascript\n${args.script}\n\`\`\``)
+            .addField('Output', `\`\`\`javascript\n${error}\n\`\`\``);
+
+            return message.channel.send({ embed });
           }
         } else {
-          message.channel.send({ embed });
+          message.channel.send({ embed: this.generateResultEmbed(val, process.hrtime(this.hrStart)) });
         }
       }
     };
@@ -65,11 +92,11 @@ class EvalCommand extends ProxyCommand {
       const hrStart = process.hrtime();
 
       // tslint:disable-next-line
-      this.lastResult = eval(args.script);
+      this.lastResult = await eval(args.script);
 
       hrDiff = process.hrtime(hrStart);
     } catch (error) {
-      const embed = new RichEmbed()
+      const embed = new MessageEmbed()
         .setTitle('Error')
         .setColor('DARK_RED')
         .addField('Input', `\`\`\`javascript\n${args.script}\n\`\`\``)
@@ -85,11 +112,11 @@ class EvalCommand extends ProxyCommand {
     return message.channel.send({ embed });
   }
 
-  private generateResultEmbed(result: any, hrDiff: [number, number], input: string | null = null): RichEmbed {
+  private generateResultEmbed(result: any, hrDiff: [number, number], input: string | null = null): MessageEmbed {
     const inspected = util.inspect(result, { depth: 0 }).replace(this.sensitivePattern, '--snip--');
 
     if (input) {
-      return new RichEmbed()
+      return new MessageEmbed()
         .setTitle('Results')
         .setColor('GREEN')
         .setDescription(`*Executed in ${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${hrDiff[1] / 1000000}ms.*`)
@@ -97,12 +124,10 @@ class EvalCommand extends ProxyCommand {
         .addField('Output', `\`\`\`javascript\n${inspected}\n\`\`\``);
     }
 
-    return new RichEmbed()
+    return new MessageEmbed()
       .setTitle('Results')
       .setColor('GREEN')
       .setDescription(`*Callback executed after ${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${hrDiff[1] / 1000000}ms.*`)
       .addField('Output', `\`\`\`javascript\n${inspected}\n\`\`\``);
   }
 }
-
-export default EvalCommand;

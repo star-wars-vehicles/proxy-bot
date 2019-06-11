@@ -1,5 +1,5 @@
-import { CommandMessage } from 'discord.js-commando';
-import { Message, RichEmbed } from 'discord.js';
+import { CommandoMessage } from 'discord.js-commando';
+import { Message, MessageEmbed } from 'discord.js';
 import { ProxyCommand, ProxyClient } from '@/structures';
 
 function parseMilliseconds(ms: number) {
@@ -21,7 +21,7 @@ function parseMilliseconds(ms: number) {
   return h + ':' + m + ':' + s;
 }
 
-class StatusCommand extends ProxyCommand {
+export default class StatusCommand extends ProxyCommand {
   constructor(client: ProxyClient) {
     super(client, {
       name: 'status',
@@ -32,21 +32,31 @@ class StatusCommand extends ProxyCommand {
     });
   }
 
-  public async run(message: CommandMessage): Promise<Message | Message[] > {
+  public async run(message: CommandoMessage): Promise<Message | Message[] > {
     const usage = Math.round((process.memoryUsage().heapUsed / 1024 / 1024 * 100) / 100);
 
-    const embed = new RichEmbed()
-      .addField('Bot Creator', 'Doctor Jew#0001', false)
-      .addField('Uptime', parseMilliseconds(this.client.uptime), false)
-      .addField('Total Users', this.client.users.array().length)
-      .addField('Total Channels', this.client.channels.array().length)
-      .addField('Total Guilds', this.client.guilds.array().length)
+    const { uptime, users, channels, guilds, user } = this.client;
+
+    if (user == null) {
+      return message.channel.send('Error!');
+    }
+
+    const embed = new MessageEmbed()
+      .setThumbnail(user.avatar || user.defaultAvatarURL)
+      .setTimestamp()
+      .addField('Bot Creator', 'Doctor Jew#0001', true)
+      .addField('Uptime', parseMilliseconds(uptime!), true)
+      .addField('Total Users', users.array().length)
+      .addField('Total Channels', channels.array().length)
+      .addField('Total Guilds', guilds.array().length)
       .addField('Node.js Version', process.version)
       .addField('Memory Usage', `${usage} MB`)
       .addField('Operating System', process.platform, false);
 
+    if (message.guild) {
+      embed.setColor(message.guild!.me!.roles.highest.color);
+    }
+
     return message.channel.send({ embed });
   }
 }
-
-export default StatusCommand;

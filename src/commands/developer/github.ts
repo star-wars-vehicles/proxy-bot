@@ -1,13 +1,12 @@
-import { CommandMessage } from 'discord.js-commando';
-import { Message, RichEmbed } from 'discord.js';
-
 import fetch from 'node-fetch';
 
-import util from '@/util';
+import { CommandoMessage } from 'discord.js-commando';
+import { Message, MessageEmbed } from 'discord.js';
 
 import { ProxyClient, ProxyCommand } from '@/structures';
+import { number, shorten, ErrorEmbed } from '@/util';
 
-class GithubCommand extends ProxyCommand {
+export default class GithubCommand extends ProxyCommand {
   constructor(client: ProxyClient) {
     super(client, {
       name: 'github',
@@ -29,9 +28,13 @@ class GithubCommand extends ProxyCommand {
         },
       ],
     });
+
+    if (!(this.config.username && this.config.password)) {
+      throw new Error('Cannot setup GitHub command with missing configuration options!');
+    }
   }
 
-  public async run(message: CommandMessage, args: { author: string, repository: string}): Promise<Message | Message[]> {
+  public async run(message: CommandoMessage, args: { author: string, repository: string}): Promise<Message | Message[]> {
     const { author, repository } = args;
 
     try {
@@ -44,28 +47,25 @@ class GithubCommand extends ProxyCommand {
 
       const json = await response.json();
 
-      const embed = new RichEmbed()
+      const embed = new MessageEmbed()
         .setColor(0xFFFFFF)
         .setAuthor('GitHub', 'https://i.imgur.com/e4HunUm.png', 'https://github.com/')
         .setTitle(json.full_name)
         .setURL(json.html_url)
-        .setDescription(json.description ? util.shorten(json.description) : 'No description.')
+        .setDescription(json.description ? shorten(json.description) : 'No description.')
         .setThumbnail(json.owner.avatar_url)
-        .addField('Stars', util.number(json.stargazers_count), true)
-        .addField('Forks', util.number(json.forks))
-        .addField('Issues', util.number(json.open_issues))
+        .addField('Stars', number(json.stargazers_count), true)
+        .addField('Forks', number(json.forks))
+        .addField('Issues', number(json.open_issues))
         .addField('Language', json.language || 'Unknown', true);
 
       return message.say({ embed });
     } catch (err) {
       if (err.status === 404) {
-        // return message.say('Could not find any results!');
-        return message.say({ embed: util.notify('Error', 'Could not find any results from GitHub!') });
+        return message.say({ embed: ErrorEmbed('Could not find any results from GitHub!') });
       }
 
-      return message.say({ embed: util.notify('Error', 'An error occured while trying to fetch data from GitHub.') });
+      return message.say({ embed: ErrorEmbed('An error occured while trying to fetch data from GitHub.') });
     }
   }
 }
-
-export default GithubCommand;

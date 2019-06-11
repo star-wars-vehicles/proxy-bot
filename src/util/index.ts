@@ -1,5 +1,2 @@
-import * as message from './message';
-
-export default {
-  ...message,
-};
+export * from '@/util/message';
+export * from '@/util/checks';

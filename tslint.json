@@ -6,11 +6,12 @@
   "linterOptions": {
     "exclude": [
       "node_modules/**",
-      "dist/**"
+      "build/**"
     ]
   },
   "rules": {
     "semicolon": [true, "always"],
+    "max-line-length": [true, 150],
     "indent": [true, "spaces", 2],
     "quotemark": [true, "single", "avoid-escape", "avoid-template"],
     "no-console": false,

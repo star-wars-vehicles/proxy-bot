@@ -1,8 +1,8 @@
-import { CommandMessage } from 'discord.js-commando';
+import { CommandoMessage } from 'discord.js-commando';
 import { Message } from 'discord.js';
 import { ProxyCommand, ProxyClient } from '@/structures';
 
-class PingCommand extends ProxyCommand {
+export default class PingCommand extends ProxyCommand {
   constructor(client: ProxyClient) {
     super(client, {
       name: 'ping',
@@ -12,7 +12,7 @@ class PingCommand extends ProxyCommand {
     });
   }
 
-  public async run(message: CommandMessage): Promise<Message | Message[]> {
+  public async run(message: CommandoMessage): Promise<Message | Message[]> {
     const response = message.channel.send('', {
       embed: {
         title: 'Measuring Latency...',
@@ -33,7 +33,7 @@ class PingCommand extends ProxyCommand {
               },
               {
                 name: 'API Ping',
-                value: `${this.client.pings[0]} ms`,
+                value: `${this.client.ws.ping} ms`,
               },
             ],
           },
@@ -44,5 +44,3 @@ class PingCommand extends ProxyCommand {
     });
   }
 }
-
-export default PingCommand;
