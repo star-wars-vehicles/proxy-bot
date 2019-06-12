@@ -53,7 +53,7 @@
     "mongoose": "^5.5.1",
     "mongoose-autopopulate": "^0.9.1",
     "mongoose-findorcreate": "^3.0.0",
-    "typegoose": "^5.6.0",
+    "typegoose": "^5.7.1",
     "node-fetch": "^2.6.0",
     "sqlite": "^3.0.3"
   },
