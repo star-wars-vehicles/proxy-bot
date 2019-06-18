@@ -4,13 +4,13 @@ import { CommandoMessage } from 'discord.js-commando';
 import { ProxyCommand, ProxyClient } from '@/structures';
 import { guild } from '@/util';
 
-export default class AddonsCommand extends ProxyCommand {
+export default class AdvertiseCommand extends ProxyCommand {
   constructor(client: ProxyClient) {
     super(client, {
-      name: 'addons',
-      group: 'workshop',
-      memberName: 'addons',
-      description: 'Get a list of all server supported addons.',
+      name: 'advertise',
+      group: 'community',
+      memberName: 'advertise',
+      description: 'Advertise your community to the server!',
       args: [
         {
           key: 'search',

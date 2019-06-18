@@ -1,19 +1,13 @@
 {
   "name": "proxy-bot",
+  "private": true,
   "version": "0.1.0",
   "description": "The Discord bot server the Star Wars Vehicles Discord server.",
-  "main": "index.js",
+  "main": "build/index.js",
   "scripts": {
-    "lint:gulp": "gulp lint",
-    "build:gulp": "gulp build",
-    "watch:gulp": "gulp watch",
-    "serve:gulp": "gulp serve",
-    "start:gulp": "gulp start",
-    "serve": "npm run serve:gulp -s",
-    "watch": "npm run watch:gulp -s",
-    "lint": "npm run lint:gulp -s",
-    "build": "npm run build:gulp -s",
-    "start": "npm run start:gulp -s"
+    "build": "gulp build",
+    "lint": "eslint src/**/* && tsc --noEmit",
+    "start": "gulp start"
   },
   "keywords": [
     "discord",
@@ -26,24 +20,23 @@
   "author": "David Katz",
   "license": "GPL-3.0",
   "devDependencies": {
-    "@types/debug": "4.1.4",
     "@types/gulp": "^4.0.6",
     "@types/gulp-nodemon": "0.0.32",
     "@types/gulp-sourcemaps": "0.0.32",
     "@types/mongoose": "^5.3.26",
-    "@types/node-fetch": "^2.3.2",
     "@types/node": "^12.0.7",
-    "debug": "^4.1.1",
+    "@types/node-fetch": "^2.3.2",
+    "@typescript-eslint/eslint-plugin": "^1.10.2",
+    "@typescript-eslint/parser": "^1.10.2",
     "del": "^4.1.1",
+    "eslint": "^5.16.0",
     "gulp": "^4.0.2",
     "gulp-nodemon": "^2.4.2",
     "gulp-sourcemaps": "^2.6.5",
     "gulp-ts-alias": "^0.2.0",
-    "gulp-tslint": "^8.1.4",
     "gulp-typescript": "^5.0.1",
-    "ts-node": "^8.1.0",
     "nodemon": "^1.19.1",
-    "tslint-eslint-rules": "^5.4.0",
+    "ts-node": "^8.3.0",
     "typescript": "^3.5.1"
   },
   "dependencies": {
@@ -53,11 +46,44 @@
     "mongoose": "^5.5.1",
     "mongoose-autopopulate": "^0.9.1",
     "mongoose-findorcreate": "^3.0.0",
-    "typegoose": "^5.6.0",
     "node-fetch": "^2.6.0",
-    "sqlite": "^3.0.3"
+    "reflect-metadata": "^0.1.13",
+    "sqlite": "^3.0.3",
+    "steamapi": "^2.0.7",
+    "typegoose": "^5.6.0"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.1"
+  },
+  "eslintConfig": {
+    "env": {
+      "node": true,
+      "es6": true,
+      "browser": true,
+      "jest": true
+    },
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "project": "./tsconfig.json"
+    },
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "rules": {
+      "semi": [
+        "error",
+        "always"
+      ],
+      "no-console": "off",
+      "no-dupe-class-members": "off",
+      "@typescript-eslint/indent": [
+        "error",
+        4
+      ]
+    }
   }
 }

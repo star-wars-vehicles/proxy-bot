@@ -1,14 +1,11 @@
-/* tslint:disable:no-shadowed-variable */
-
-import * as util from 'util';
+import util from 'util';
 
 import { Mongoose } from 'mongoose';
 import { Message, MessageEmbed } from 'discord.js';
 import { CommandoMessage } from 'discord.js-commando';
-import { Embeds as EmbedPaginator } from 'discord-paginationembed';
+import { Embeds } from 'discord-paginationembed';
 
 import { ProxyCommand, ProxyClient } from '@/structures';
-// import { EmbedPaginator } from '@/structures/paginator';
 
 export default class EvalCommand extends ProxyCommand {
   private lastResult: any = null;
@@ -43,10 +40,8 @@ export default class EvalCommand extends ProxyCommand {
   }
 
   public async run(message: CommandoMessage, args: { script: string }): Promise<Message | Message[]> {
-    const msg: CommandoMessage = message;
     const client: ProxyClient = message.client as ProxyClient;
     const db: Mongoose = client.mongoose;
-    const objects = client.registry.evalObjects;
     const lastResult = this.lastResult;
 
     const reply = (val: any) => {
@@ -59,7 +54,7 @@ export default class EvalCommand extends ProxyCommand {
           });
 
           try {
-            new EmbedPaginator()
+            new Embeds()
               .setChannel(message.channel)
               .setArray(embeds)
               .setAuthorizedUsers([ message.author.id ])
@@ -91,7 +86,6 @@ export default class EvalCommand extends ProxyCommand {
     try {
       const hrStart = process.hrtime();
 
-      // tslint:disable-next-line
       this.lastResult = await eval(args.script);
 
       hrDiff = process.hrtime(hrStart);
