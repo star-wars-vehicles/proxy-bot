@@ -21,11 +21,11 @@ export default class CommissionCommand extends ProxyCommand {
         new Question({
             text: 'If you would prefer a particular develop, please enter their Discord ID, otherwise enter \'no\'',
             validator: async (m: Message): Promise<boolean> => {
-                return !!(await UserModel.findOne({discord: m.content}).exec());
+                return !!(await UserModel.findOne({ discord: m.content }).exec());
             },
         }),
     ];
-    
+
     public constructor(client: ProxyClient) {
         super(client, {
             name: 'commission',
@@ -40,49 +40,49 @@ export default class CommissionCommand extends ProxyCommand {
             },
         });
     }
-    
+
     @guild
     @registered
     public async run(message: CommandoMessage): Promise<Message | Message[]> {
-        const form = new Form({ channel: message.channel, questions: this.questions}).setUser(message.author);
-        
+        const form = new Form({ channel: message.channel, questions: this.questions }).setUser(message.author);
+
         const { answers, status } = await form.build();
-        
+
         if (status !== 'done') {
             return message.channel.send({
                 embed: ErrorEmbed('Cannot submit an incomplete commission!')
-                .addField('Reason', status === 'cancel' ? 'Form cancelled.' : 'Form timed out!'),
+                    .addField('Reason', status === 'cancel' ? 'Form cancelled.' : 'Form timed out!'),
             });
         }
-        
-        const author = await UserModel.findOne({ discord: message.author.id }).exec();
-        
+
+        const author = (await UserModel.findOne({ discord: message.author.id }).exec())!;
+
         const commission = new CommissionModel({ author });
-        
+
         if (answers[0].content.toLowerCase() !== 'no') {
             commission.community = answers[0].content;
         }
-        
+
         commission.details = answers[1].content;
         commission.references = answers[2].content.split(',');
-        
+
         if (!isNaN(parseInt(answers[3].content, 10))) {
             const dev = await UserModel.findOne({ discord: answers[3].content }).exec();
-            
+
             if (!dev) {
                 return message.channel.send({ embed: ErrorEmbed('Failed to find the requested developer!') });
             }
-            
+
             commission.requestedDev = dev;
         }
-        
+
         commission.save();
-        
+
         return message.channel.send({
             embed: NotifyEmbed('Success', 'You have submitted a new commission!', 'GREEN')
-            .addField('Author', author!.discord)
-            .addField('Steam ID', author!.steam)
-            .addField('Details', answers[1].content),
+                .addField('Author', author!.discord)
+                .addField('Steam ID', author!.steam)
+                .addField('Details', answers[1].content),
         });
     }
 }
