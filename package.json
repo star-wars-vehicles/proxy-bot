@@ -24,7 +24,7 @@
     "@types/gulp-nodemon": "0.0.32",
     "@types/gulp-sourcemaps": "0.0.32",
     "@types/mongoose": "^5.5.38",
-    "@types/node": "^13.1.2",
+    "@types/node": "^13.1.8",
     "@types/node-fetch": "^2.5.4",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
