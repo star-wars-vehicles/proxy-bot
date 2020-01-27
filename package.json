@@ -44,7 +44,7 @@
     "discord.js": "github:discordjs/discord.js",
     "discord.js-commando": "github:discordjs/commando",
     "mongoose": "^5.8.9",
-    "mongoose-autopopulate": "^0.10.0",
+    "mongoose-autopopulate": "^0.11.0",
     "mongoose-findorcreate": "^3.0.0",
     "node-fetch": "^2.6.0",
     "reflect-metadata": "^0.1.13",
