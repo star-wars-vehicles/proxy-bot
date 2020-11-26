@@ -43,7 +43,7 @@
     "discord-paginationembed": "^1.0.3",
     "discord.js": "github:discordjs/discord.js",
     "discord.js-commando": "github:discordjs/commando",
-    "mongoose": "^5.9.11",
+    "mongoose": "^5.10.16",
     "mongoose-autopopulate": "^0.12.2",
     "mongoose-findorcreate": "^3.0.0",
     "node-fetch": "^2.6.0",
